@@ -1,0 +1,15 @@
+
+
+.Fading {
+    position : absolute;
+    top: 0px;
+    left : 0px;
+    transition: all 2s ease-in-out;
+}
+
+.Switch {
+    position : absolute;
+    top: 0px;
+    left : 0px;
+    transition: all 0s;
+}

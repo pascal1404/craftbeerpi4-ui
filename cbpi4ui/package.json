@@ -5,7 +5,7 @@
   "proxy": "http://localhost:8000",
   "homepage": "./",
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
+    "start": "react-scripts --openssl-legacy-provider --expose-gc --max-old-space-size=4096 start",
     "build": "react-scripts --openssl-legacy-provider --expose-gc --max-old-space-size=4096 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -44,6 +44,7 @@
     "react-select": "^4.3.1",
     "react-smooth-dnd": "^0.11.1",
     "react-split-pane": "^0.1.92",
+    "react-svgmt": "^1.2.0",
     "react-zoom-pan-pinch": "^1.6.1",
     "systeminformation": "^5.8.6",
     "uuid": "^8.3.2",

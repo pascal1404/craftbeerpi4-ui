@@ -111,8 +111,14 @@ export const widget_list = [
     component: CustomSVG,
     icon: CBPiSVGIcon,
     props: [
-      { name: "width", default: "100", type: "text", unit:"px"  },
       { name: "name", default: "", type: "widget" },
+      { name: "on", default: "sw_on", type: "text" },
+      { name: "off", default: "sw_off", type: "text" },
+      { name: "actor", default: "", type: "actor" },
+      {name: "fade", options: ["Fading","Switch"], default: "Fading", type: "select"},
+      {name: "rotate", options: ["None","-90deg","90deg","180deg"], default: "None", type: "select"},
+      {name: "flip", options: ["None","vertical","horizontal","both"], default: "None", type: "select"},
+      { name: "width", default: "100", type: "text", unit:"px"  }
     ],
   },
   {

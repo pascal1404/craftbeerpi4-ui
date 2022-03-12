@@ -68,3 +68,7 @@ circle{
   -moz-user-select: none;
   -webkit-user-drag: none;
 }
+
+.icons {
+  color: white;
+}

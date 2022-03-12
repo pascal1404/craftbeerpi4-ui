@@ -124,7 +124,6 @@ const GrafanaChart = ({ id }) => {
   const load_data = () => {
     if (model?.props?.url) {
       setLoading(true);
-      console.log(toTime)
       if(toTime == "now"){
         setCounter(counter => counter + 1);
       }

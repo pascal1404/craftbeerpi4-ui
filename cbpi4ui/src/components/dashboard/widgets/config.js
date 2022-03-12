@@ -4,6 +4,7 @@ import ShowChartIcon from '@material-ui/icons/ShowChart';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { CBPiCalculatorIcon, CBPiControlIcon, CBPiKettle, CBPiKettle2Icon, CBPiLedIcon, CBPiLiquidIcon, CBPiSensorIcon, CBPiSVGIcon, CBPiTankIcon, CBPiThermometerIcon } from '../../util/icons/CBPiSensorIcon';
 import { DashboardButton } from "./Button";
 import { Calculator } from "./Calculator";
@@ -24,6 +25,7 @@ import { TargetTemp } from "./TargetTemp";
 import { FermenterTargetTemp } from "./FermenterTargetTemp";
 import { FermenterSteps } from './FermenterSteps';
 import { Text } from "./Text";
+import { RecipeList } from "./RecipeList";
 export const widget_list = [
   {
     name: "Kettle",
@@ -105,6 +107,16 @@ export const widget_list = [
             { name: "stepsize", default: "14", type: "text", unit: "pt" },
             { name: "namesize", default: "14", type: "text", unit: "pt" }],
   },
+
+  {
+    name: "RecipeList",
+    type: "RecipeList",
+    component: RecipeList,
+    icon: ReceiptIcon,
+    props: [{ name: "width", default: "200", type: "text", unit: "px" },
+            { name: "stepsize", default: "14", type: "text", unit: "pt" },
+            { name: "namesize", default: "14", type: "text", unit: "pt" }],
+  },
   {
     name: "SVG",
     type: "CustomSVG",
@@ -116,7 +128,7 @@ export const widget_list = [
       { name: "off", default: "sw_off", type: "text" },
       { name: "actor", default: "", type: "actor" },
       {name: "fade", options: ["Fading","Switch"], default: "Fading", type: "select"},
-      {name: "rotate", options: ["None","-90deg","90deg","180deg"], default: "None", type: "select"},
+      {name: "rotate", options: ["0deg","-90deg","90deg","180deg"], default: "None", type: "select"},
       {name: "flip", options: ["None","vertical","horizontal","both"], default: "None", type: "select"},
       { name: "width", default: "100", type: "text", unit:"px"  }
     ],

@@ -7,6 +7,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { actorapi } from "../../data/actorapi";
 import PropsEdit from "../../util/PropsEdit";
 import Confetti from "react-dom-confetti";
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ButtonActionPropsDialog = ({ action = {}, config, open, onClose, onSubmit }) => {
   const [props, setProps] = useState({});
@@ -113,6 +114,7 @@ export const DashboardButton = ({ id, width, height }) => {
     let cssStyle = { width: model.width + "px", height: model.height + "px" };
     let btnColor = actor?.state ? "primary" : "primary";
     let btnVariant = actor?.state ? "contained" : "outlined";
+    let timedIconOff = (actor?.props.delay_type == "switch-off delay") ? true : false;
     
     const toggle = () => {
       if (!draggable && model.props?.actor) {
@@ -126,6 +128,38 @@ export const DashboardButton = ({ id, width, height }) => {
         return model.name;
       } else {
         return "Missing Config";
+      }
+    };
+    
+    const timedactor = () => {
+      if (model.props?.actor && actor) {
+            return actor.type.includes("TimedActor");
+      }
+      else {
+          return false;
+      }
+    };
+
+    const progress = () => {
+      if (model.props?.actor && actor) {
+        return 100 / Number(actor.props.delay_time) * actor.timer;
+      } 
+      else {
+        return 100;
+      }
+    };
+
+    const timer = () => {
+      if (model.props?.actor && actor) {
+        if (timedIconOff) {
+          return actor.timer + " s";
+        }
+        else {
+          return actor.timer + "/" + actor.props.delay_time + " s";
+        }
+      } 
+      else {
+        return "NV";
       }
     };
 
@@ -152,57 +186,68 @@ export const DashboardButton = ({ id, width, height }) => {
     const handleClose = () => setOpen(false);
     const handleOpen = () => setOpen(true);
 
-    if (action === "yes" && actor) {
-      if (power())
-      {
-        return (
-          <div style={cssStyle}>
-            <ButtonGroup>
-              <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
-              <div style={size()}> {name()}({power()}) </div>
-              </Button>
-              <Button disabled={draggable} onClick={handleOpen} color="primary" size="small" aria-label="select merge strategy" aria-haspopup="menu">
-                <MoreVertIcon />
-              </Button>
-            </ButtonGroup>
-            <ButtonActionDialog open={open} onClose={handleClose} model={model} actor={actor} />
-          </div>
-        );
-      }
-      else {
-        return (
-          <div style={cssStyle}>
-            <ButtonGroup>
+    if (!timedactor()) {
+        if (action === "yes" && actor) {
+          if (power())
+          {
+            return (
+              <div style={cssStyle}>
+                <ButtonGroup>
+                  <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
+                  <div style={size()}> {name()}({power()}) </div>
+                  </Button>
+                  <Button disabled={draggable} onClick={handleOpen} color="primary" size="small" aria-label="select merge strategy" aria-haspopup="menu">
+                    <MoreVertIcon />
+                  </Button>
+                </ButtonGroup>
+                <ButtonActionDialog open={open} onClose={handleClose} model={model} actor={actor} />
+              </div>
+            );
+          }
+          else {
+            return (
+              <div style={cssStyle}>
+                <ButtonGroup>
+                  <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
+                  <div style={size()}> {name()} </div>
+                  </Button>
+                  <Button disabled={draggable} onClick={handleOpen} color="primary" size="small" aria-label="select merge strategy" aria-haspopup="menu">
+                    <MoreVertIcon />
+                  </Button>
+                </ButtonGroup>
+                <ButtonActionDialog open={open} onClose={handleClose} model={model} actor={actor} />
+              </div>
+            );
+          }
+        } else {
+          if (power())
+          {
+            return (
+              <div style={cssStyle}>
+                <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
+                <div style={size()}> {name()} ({power()}) </div>
+                </Button>
+              </div>
+            );
+          }
+          else{
+            return (
+            <div style={cssStyle}>
               <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
               <div style={size()}> {name()} </div>
               </Button>
-              <Button disabled={draggable} onClick={handleOpen} color="primary" size="small" aria-label="select merge strategy" aria-haspopup="menu">
-                <MoreVertIcon />
-              </Button>
-            </ButtonGroup>
-            <ButtonActionDialog open={open} onClose={handleClose} model={model} actor={actor} />
-          </div>
-        );
-      }
-    } else {
-      if (power())
-      {
-        return (
-          <div style={cssStyle}>
-            <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
-            <div style={size()}> {name()} ({power()}) </div>
-            </Button>
-          </div>
-        );
+            </div>
+          )}
+        }
       }
       else{
         return (
         <div style={cssStyle}>
-          <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor}>
-          <div style={size()}> {name()} </div>
+          <Button disabled={draggable} onClick={toggle} fullWidth variant={btnVariant} color={btnColor} style={{borderRadius: '0px'}} >
+          <div style={size()}> {name()} ({timer()}) </div>
           </Button>
+          <LinearProgress variant="determinate" value={progress()} sx={{ '& .MuiLinearProgress-bar': {backgroundColor: '#00FF00'}, backgroundColor: '#008800'}} />
         </div>
       )}
-    }
-  }, [model.props?.actor, model.props?.size, model.props?.action, model.name, actor, id, open, draggable]);
+    }, [model.props?.actor, model.props?.size, model.props?.action, model.name, actor, id, open, draggable]);
 };

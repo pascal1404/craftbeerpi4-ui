@@ -98,6 +98,9 @@ export const RecipeList = ({ id }) => {
       var temp = output.filter(String);
       setIng(temp);
     }
+    else {
+        setIng([["-","-"],["-"],["-"],["-"]])
+    }
   }, [state.mashBasic.desc]);
 
   let inputStyle = { color: "#fff", width: `${model?.props?.width}px`,fontSize: `${model?.props?.namesize}pt`, backgroundColor: "#2c282e", padding: 5, borderRadius: 5 };

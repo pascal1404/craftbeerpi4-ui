@@ -184,7 +184,7 @@ const GrafanaChart = ({ id }) => {
   return (
     <div className="box">
       {}
-      <iframe key={counter} src={model?.props?.url+"?orgId=1&from="+fromTime+"&to="+toTime+"&panelId="+model?.props?.panelID} width={model?.props?.width} height={model?.props?.height} frameborder="0"></iframe>
+      <iframe key={counter} src={model?.props?.url+"?orgId=1&from="+fromTime+"&to="+toTime+"&panelId="+model?.props?.panelID} width={model?.props?.width} height={model?.props?.height} frameBorder="0"></iframe>
       <IconButton  ref={anchorRef} onClick={()=>setOpen(true)} size="small" variant="contained" style={{ position: "absolute", top: 5, right: 10 }}>
         <MoreVertIcon />
       </IconButton>

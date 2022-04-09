@@ -25,9 +25,9 @@ const NestedList = (props) => {
       fontFamily: "Advent Pro"
     };
     
-    const NestList = Items.map((Elem) =>
+    const NestList = Items.map((Elem, idx) =>
       <div>
-        <ListItem sx={{ height : 30 }} >
+        <ListItem sx={{ height : 30 }} key={idx} >
           <ListItemIcon>
             <ArrowRightIcon className="icons" />
           </ListItemIcon>
@@ -58,7 +58,7 @@ const NumberList = (props) => {
   
     const listItems = iconList.map((Icon, idx) =>
     <div>
-      <ListItemButton onClick={handleClickItem.bind(this, idx)}>
+      <ListItemButton onClick={handleClickItem.bind(this, idx)} key={idx} >
         <ListItemIcon>
           <Icon className="icons" />
         </ListItemIcon>

@@ -38,9 +38,27 @@ import { SvgLoader, SvgProxy } from 'react-svgmt';
     
     const handleStyleElem = (svgStyle) => {
         var styleStr = svgStyle.outerHTML;
-        styleStr = styleStr.replaceAll(/url\(#((\w|-)*)\);/g, 'url(#$1-'+ nr +');');
+        styleStr = styleStr.replaceAll(/url\(#((\w|-)*)\)/g, 'url(#$1-'+ nr +')');
         styleStr = styleStr.replaceAll(/\.((\w|-)*)(\{| \{)/g, '.$1-'+ nr +'{');
         svgStyle.outerHTML = styleStr;
+    };
+    
+    const handleInlineStyle = (inlineStyle) => {
+        if (typeof inlineStyle.length !== 'undefined') {
+          const output = inlineStyle.map((s, i) => {
+            var styleStr = s.outerHTML;
+            styleStr = styleStr.replaceAll(/url\(#((\w|-)*)\)/g, 'url(#$1-'+ nr +')');
+            styleStr = styleStr.replaceAll(/\.((\w|-)*)(\{| \{)/g, '.$1-'+ nr +'{');
+            s.outerHTML = styleStr;
+            return s;
+          });
+        }
+        else {
+          var styleStr = inlineStyle.outerHTML;
+          styleStr = styleStr.replaceAll(/url\(#((\w|-)*)\)/g, 'url(#$1-'+ nr +')');
+          styleStr = styleStr.replaceAll(/\.((\w|-)*)(\{| \{)/g, '.$1-'+ nr +'{');
+          inlineStyle.outerHTML = styleStr;
+        }
     };
     
     const handleGradients = (gradients) => {
@@ -81,10 +99,11 @@ import { SvgLoader, SvgProxy } from 'react-svgmt';
         <div className="no-drag" >
           <SvgLoader width={model?.props?.width || 100} path={`/dashboard/static/${widget}.svg`} style={{ transform: `${scale} rotate(${rotate})` }} >
             
-            <SvgProxy selector="linearGradient" onElementSelected={handleGradients} ></ SvgProxy>
-            <SvgProxy selector="radialGradient" onElementSelected={handleGradients} ></ SvgProxy>
-            <SvgProxy selector="[class]" onElementSelected={handleClasses} ></ SvgProxy>
-            <SvgProxy selector="defs > style" onElementSelected={handleStyleElem} ></ SvgProxy>
+            <SvgProxy selector="linearGradient" onElementSelected={handleGradients} />
+            <SvgProxy selector="radialGradient" onElementSelected={handleGradients} />
+            <SvgProxy selector="[class]" onElementSelected={handleClasses} />
+            <SvgProxy selector="style" onElementSelected={handleStyleElem} />
+            <SvgProxy selector="[style]" onElementSelected={handleInlineStyle} />
             
             { classNameON ?  <SvgProxy selector={`.${classNameON}-${svgNr}`}  class={classNameON + "-" + svgNr + " " + fade } opacity={actor?.state ? "1" : "0"} /> : <div/> }
             { classNameOFF ? <SvgProxy selector={`.${classNameOFF}-${svgNr}`} class={classNameOFF + "-" + svgNr + " " + fade } opacity={actor?.state ? "0" : "1"} /> : <div/> }

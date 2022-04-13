@@ -76,6 +76,9 @@ export const CBPiProvider = ({ children }) => {
         
         a.show(data.id, data.title, data.message, data.type, data.action);
         break;
+      case "delete_notification":
+        a.remove(data.id);
+        break;
       default:
         break;
     }

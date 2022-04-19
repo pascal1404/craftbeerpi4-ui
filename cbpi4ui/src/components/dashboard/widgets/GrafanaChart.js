@@ -104,7 +104,7 @@ const GrafanaChart = ({ id }) => {
   const [loading, setLoading] = useState(false);
   const [props, setProps] = useState({});
   const [counter, setCounter] = useState(0);
-  const [fromTime, setFromTime] = useState("now-12h");
+  const [fromTime, setFromTime] = useState("now-" + model.props?.timedelta + "h");
   const [toTime, setToTime] = useState("now");
 
 
@@ -112,7 +112,7 @@ const GrafanaChart = ({ id }) => {
     load_data();
     const interval = setInterval(() => {
       load_data();
-    }, (model.props?.refresh || 10) * 1000);
+    }, (model.props?.refresh || 60) * 1000);
     return () => clearInterval(interval);
   }, [model?.props?.url, model.props?.refresh]);
 

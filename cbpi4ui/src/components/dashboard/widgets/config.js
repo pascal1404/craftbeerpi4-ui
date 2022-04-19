@@ -176,9 +176,10 @@ export const widget_list = [
     component: GrafanaChart,
     icon: AutoGraphIcon,
     props: [
-      { name: "url", default: "http://localhost:3000/d-solo/{ID}/{dashboard}", type: "text" },
+      { name: "url", default: "http://{IP}:3000/d-solo/{dashboard-ID}/{dashboard-name}", type: "text" },
       { name: "panelID", default: "2", type: "text" },
-      { name: "refresh", default: 10, type: "number" },
+      { name: "refresh", default: 60, type: "number" },
+      { name: "timedelta", default: 12, type: "number" },
       { name: "width", default: 100, type: "text" }, 
       { name: "height", default: 100, type: "text" }
     ],

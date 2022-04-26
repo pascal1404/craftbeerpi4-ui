@@ -1,13 +1,12 @@
-import { ClickAwayListener, Dialog, DialogTitle, Divider, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Popper } from "@material-ui/core";
+import { ClickAwayListener, Dialog, DialogTitle,  IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Popper } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { TextField, DialogActions, DialogContent, DialogContentText, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { TextField, DialogActions, DialogContent, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useEffect, useRef, useState } from "react";
-import Plot from "react-plotly.js";
-import { logapi } from "../../data/logapi";
+import { systemapi } from "../../data/systemapi"
 import { useDraggable, useModel } from "../DashboardContext";
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
@@ -95,21 +94,32 @@ const SetRangeDialog = ({ open, onClose, onSubmit }) => {
 
 
 const GrafanaChart = ({ id }) => {
-  const [data, setData] = useState([]);
   const model = useModel(id);
   const draggable = useDraggable();
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const anchorRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [props, setProps] = useState({});
   const [counter, setCounter] = useState(0);
   const [fromTime, setFromTime] = useState("now-" + model.props?.timedelta + "h");
   const [toTime, setToTime] = useState("now");
-
+  const [url, setUrl] = useState([]);
 
   useEffect(() => {
     load_data();
+    
+    systemapi.getsysteminfo((data) => {
+      var urlTemp ="";
+      if(data['wlan0']!==""&&data['wlan0']!=="N/A"){
+          urlTemp = data['wlan0'];
+          urlTemp = model?.props?.url.replaceAll(/(.*)localhost(.*)/g, '$1'+ urlTemp +'$2');
+      }
+      else if(data['eth0']!==""&&data['eth0']!=="N/A"){
+          urlTemp = data['eth0'];
+          urlTemp = model?.props?.url.replaceAll(/(.*)localhost(.*)/g, '$1'+ urlTemp +'$2');
+      }
+      setUrl(urlTemp);
+    });
     const interval = setInterval(() => {
       load_data();
     }, (model.props?.refresh || 60) * 1000);
@@ -124,7 +134,7 @@ const GrafanaChart = ({ id }) => {
   const load_data = () => {
     if (model?.props?.url) {
       setLoading(true);
-      if(toTime == "now"){
+      if(toTime === "now"){
         setCounter(counter => counter + 1);
       }
       setLoading(false);
@@ -139,7 +149,7 @@ const GrafanaChart = ({ id }) => {
   const handle_submit = (props) => {
     setOpen(false);
     setFromTime(props.fromT);
-    if(props.box=="true"){
+    if(props.box==="true"){
       setToTime("now");
     }
     else {
@@ -184,7 +194,7 @@ const GrafanaChart = ({ id }) => {
   return (
     <div className="box">
       {}
-      <iframe key={counter} src={model?.props?.url+"?orgId=1&from="+fromTime+"&to="+toTime+"&panelId="+model?.props?.panelID} width={model?.props?.width} height={model?.props?.height} frameBorder="0"></iframe>
+      <iframe key={counter} title={"Grafana-Chart " + id} src={(model?.props?.url.includes('localhost') ? url : model?.props?.url)+"?orgId=1&from="+fromTime+"&to="+toTime+"&panelId="+model?.props?.panelID} width={model?.props?.width} height={model?.props?.height} frameBorder="0"></iframe>
       <IconButton  ref={anchorRef} onClick={()=>setOpen(true)} size="small" variant="contained" style={{ position: "absolute", top: 5, right: 10 }}>
         <MoreVertIcon />
       </IconButton>

@@ -27,7 +27,7 @@ const NestedList = (props) => {
     
     const NestList = Items.map((Elem, idx) =>
       <div>
-        <ListItem sx={{ height : 30 }} key={idx} >
+        <ListItem sx={{ minHeight : 30 }} key={idx} >
           <ListItemIcon>
             <ArrowRightIcon className="icons" />
           </ListItemIcon>
